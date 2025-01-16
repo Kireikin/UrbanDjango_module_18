@@ -9,3 +9,7 @@ def func_template(request):
 
 class ClassTemplate(TemplateView):
     template_name = 'class_template.html'
+
+
+def func_welcome(request):
+    return render(request, 'welcome.html')
