@@ -1,0 +1,5 @@
+консольные команды:
+
+запуск сервера:" python manage.py runserver "
+
+создание "заготовки" приложения: " python manage.py startapp <enter name app here> "
