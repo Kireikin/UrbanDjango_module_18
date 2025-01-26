@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Добро пожаловать на главную страницу</title>
+   <meta charset="UTF-8">
+    <title> {% block title %} Главная страница {% endblock %} </title>
+    <link rel='stylesheet' type="text/css" href='{% static "style.css" %}'>
 </head>
 <body>
     <h1> "Домашние задания модуля 18:" </h1>
@@ -10,11 +12,15 @@
     <ul>
         <li> <h2>
                     "Домашнее задание по теме "Базовые HTML тэги в шаблонах"
-                    <a href="platform/"> "Задание 18-3, приложение Task3" </a>
+                    <a href="platform3/"> "Задание 18-3, приложение Task3" </a>
+             </h2>
+        </li>
+        <li> <h2>
+                    "Домашнее задание по теме "DTL. Теги, наследование."
+                    <a href="platform4/"> "Задание 18-4, приложение Task4" </a>
              </h2>
         </li>
 
     </ul>
-
 </body>
 </html>

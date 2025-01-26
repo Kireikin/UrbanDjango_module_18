@@ -1,0 +1,23 @@
+{% extends "fourth_task/menu.html" %}
+{% block title %}  Игры - {{ block.super }} {% endblock %}
+
+{% block pagename %}
+    {{ block.super }} <h1> Страница 2 </h1>
+{% endblock %}
+
+{% block menu %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <h1> Игры:</h1>
+<ul>
+    <li>{{game1}} <button>Добавить в корзину</button> </li>
+    <li>{{game2}} <button>Добавить в корзину</button> </li>
+    <li>{{game3}} <button>Добавить в корзину</button> </li>
+</ul>
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "fourth_task/menu.html" %}
+{% block title %}  Главная страница - {{ block.super }} {% endblock %}
+
+{% block pagename %}
+    {{ block.super }} <h1> Страница 1 </h1>
+{% endblock %}
+
+{% block menu %}
+    {{ block.super }}
+<form action="http://127.0.0.1:8000/">
+            <a href="http://127.0.0.1:8000/"> <button> Вернуться обратно </button> </a>
+</form>
+{% endblock %}
+
+{% block content %}
+<!--пустой блок -->
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock %}
