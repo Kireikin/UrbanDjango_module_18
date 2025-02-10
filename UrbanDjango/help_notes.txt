@@ -3,3 +3,132 @@
 запуск сервера:" python manage.py runserver "
 
 создание "заготовки" приложения: " python manage.py startapp <enter name app here> "
+
+.Get и Post запросы в Python:
+.Get запросы видно в коммандной строке, Post запросы маскируются и они используются для конфедециальной информации пользователя.
+вызов запросов возможен при подключчении библиотек:
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def index(request):
+    name = request.GET.get('name', 'Guest')
+    age = request.GET.get('age', '0')
+    return HttpResponse(f"Hello, {name} {age}!")
+чтобы передать в такой конструкции данные для переменной name, нужно в адресной строке добавить:
+.../?name=John&age=30, т.е. параметры можно передавать подряд через знак обьединения &
+
+def simple_post(request):
+    if request.method == 'POST':
+        message = request.POST.get('message', '')
+        return HttpResponse(f"You said: {message}")
+    return render(request, 'index2.html')
+НО ДЛЯ ВЫВОДА ИНФОРМАЦИИ ЗАПРОСА ТРЕБУЕТСЯ ПРИМЕНИТЬ СЛЕДУЮЩУЮ ФОРМУ index2.html:
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <input type = "text" name = "message">
+        <button type = "submit">Send</button>
+    </form>
+</body>
+
+Простая отправка сообщений от сервера к пользователю выполняется следующей конструкцией:
+def index(request):
+    return HttpResponse(f"сообщение")
+дополнительно можем отправлять пользователю статус Get-запроса (status = 400 это ошибка, причина reason = ):
+  def index(request):
+    return HttpResponse('сообщение', status = 400 , reason = 'текст для расшифровки причины')
+    причина будет видна нам на сервере, а пользователю сообщение типа "извините".
+
+Формы отправки данных. HTML и Django формы.
+HTML файл:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="with=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale = 0.5">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Ваше имя: </label>
+        <input type="text" id="name" name="name" maxlength="100" required>
+
+        <label for="email">Email: </label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Сообщение: </label>
+        <textarea id="message" name="message" required> </textarea>
+
+        <label for="subscribe">
+            <input type="checkbox" id="subscribe" name="subscribe" required>
+            Подписаться на рассылку
+        </label>
+
+        <button type="submit">Отправить</button>
+    </form>
+
+</body>
+</html>
+
+Чтобы эта форма работала, её нужно принять и обработать в views.py приложения!:
+HTML форма отрабатывается так:
+
+from django.http import HttpResponse
+from django.shortcuts import render
+
+def index(request):
+    if request.mehod == "Post":
+        # Получаем данные:
+        name = request.Post.get('name')
+        email = request.Post.get('email')
+        message = request.Post.get('message')
+        subscribe = request.Post.get('subscribe') == 'on'
+
+        print(f'Name: {name}')
+        print(f'email: {email}')
+        print(f'message: {message}')
+        print(f'subscribe: {subscribe}')
+
+        # Http ответ пользователю:
+        return HttpResponse("Форма успешно отправлена")
+    # если это  GET запрос:
+    return render(request, 'fifth_task/registration_page.html')
+
+та же Django форма обрабатывается так:
+создается файл форм (forms.py )в корне приложения с содержимым формы:
+from django import forms
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100, label='Ваше имя:')
+    email = forms.EmailField(label='Email:')
+    message = forms.CharField(widget=forms.Textarea, label='Сообщение:')
+    subscribe = forms.BooleanField(required=False, label='Подписаться на рассылку')
+
+и переписывается функция во views.py:
+def index(request):
+    if request.method == "POST":
+        # Получаем данные:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # обработка данных
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            subscribe = form.cleaned_data['subscribe']
+            # Тут дальнейшая логика например отправка емайла
+            print(f'Name: {name}')
+            print(f'email: {email}')
+            print(f'message: {message}')
+            print(f'subscribe: {subscribe}')
+            return HttpResponse("Форма успешно отправлена")
+    else:
+        form = ContactForm()
+    return render(request, 'fifth_task/registration_page.html', {'form': form})
+
+На этом лекция заканчивается! бял!
+нашел вспомогалку в инете:
+https://ru.stackoverflow.com/questions/991005/Хочу-чтобы-в-loginview-в-случаее-неверности-пароля-программа-писала-об-этом
